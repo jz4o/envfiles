@@ -1,6 +1,14 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+## env file
+require 'yaml'
+yaml = File.exists?('env.yml') ? YAML.load_file('env.yml') : {}
+
+# git
+GIT_USER_NAME  = yaml.dig('git', 'user', 'name').freeze
+GIT_USER_EMAIL = yaml.dig('git', 'user', 'email').freeze
+
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -77,6 +85,20 @@ Vagrant.configure("2") do |config|
     sudo yum install -y https://centos7.iuscommunity.org/ius-release.rpm
     sudo yum install -y git2u yum-utils
     sudo yum-config-manager --disable ius
+
+    # gitconfig
+    sudo -u vagrant curl -s https://raw.githubusercontent.com/jz4o/dotfiles/master/.gitconfig -o /home/vagrant/.gitconfig
+    sudo -u vagrant touch /home/vagrant/.gitconfig
+    if [ -n "#{GIT_USER_NAME}" ] || [ -n "#{GIT_USER_EMAIL}" ]; then
+      sudo -u vagrant echo "[user]" >> /home/vagrant/.gitconfig
+
+      if [ -n "#{GIT_USER_NAME}" ]; then
+        sudo -u vagrant echo "  name  = #{GIT_USER_NAME}" >> /home/vagrant/.gitconfig
+      fi
+      if [ -n "#{GIT_USER_EMAIL}" ]; then
+        sudo -u vagrant echo "  email = #{GIT_USER_EMAIL}" >> /home/vagrant/.gitconfig
+      fi
+    fi
 
     # install vim
     sudo yum install -y vim
