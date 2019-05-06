@@ -81,6 +81,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo yum update -y
 
+    # inputrc
+    sudo -u vagrant curl -s https://raw.githubusercontent.com/jz4o/dotfiles/master/.inputrc -o /home/vagrant/.inputrc
+
     # install git
     sudo yum install -y https://centos7.iuscommunity.org/ius-release.rpm
     sudo yum install -y git2u yum-utils
@@ -102,6 +105,9 @@ Vagrant.configure("2") do |config|
 
     # install vim
     sudo yum install -y vim
+
+    # vimrc
+    sudo -u vagrant curl -s https://raw.githubusercontent.com/jz4o/dotfiles/master/.vimrc -o /home/vagrant/.vimrc
 
     # install docker
     sudo yum install -y yum-utils device-mapper-persistent-data lvm2
