@@ -9,6 +9,19 @@ yaml = File.exists?('env.yml') ? YAML.load_file('env.yml') : {}
 GIT_USER_NAME  = yaml.dig('git', 'user', 'name').freeze
 GIT_USER_EMAIL = yaml.dig('git', 'user', 'email').freeze
 
+GIT_REPOSITORIES = yaml.dig('git', 'repositories').to_a
+                     .find_all { |repository| repository['repo_url'].empty?.! }
+                     .each do |repository|
+                       repository['clone_dir'] ||= ''
+                       joint = repository['clone_dir'].empty? ? nil : '/'
+                       repository['clone_dir'] = ['/home/vagrant', repository['clone_dir']].join(joint)
+
+                       repository['dir_name'] ||= ''
+                       if repository['dir_name'].empty?
+                         repository['dir_name'] = repository['repo_url'].split('/').last.sub('.git', '')
+                       end
+                     end.freeze
+
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -102,6 +115,10 @@ Vagrant.configure("2") do |config|
         sudo -u vagrant echo "  email = #{GIT_USER_EMAIL}" >> /home/vagrant/.gitconfig
       fi
     fi
+
+    # git repositories
+    #{ GIT_REPOSITORIES.map { |repository| "sudo -u vagrant mkdir -p #{repository['clone_dir']}" }.join("\n") }
+    #{ GIT_REPOSITORIES.map { |repository| "sudo -u vagrant git clone #{repository['repo_url']} #{repository['clone_dir']}/#{repository['dir_name']}" }.join("\n") }
 
     # install vim
     sudo yum install -y vim
