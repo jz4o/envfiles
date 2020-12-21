@@ -1,0 +1,13 @@
+version: '3.5'
+services:
+  marp-cli:
+    image: marpteam/marp-cli:latest
+    volumes:
+      - .:/usr/src/
+    working_dir: /usr/src
+    ports:
+      - 8080:8080
+    tty: true
+    stdin_open: true
+    command: ["-s", ".", "--allow-local-files"]
+
