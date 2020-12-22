@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+  git:
+    build:
+      context: ./
+      dockerfile: dockerfiles/git/Dockerfile
+    environment:
+      LANG: en_US.UTF-8
+      TZ: Asia/Tokyo
+    tty: true
+    working_dir: /usr/src
