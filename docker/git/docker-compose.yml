@@ -8,4 +8,6 @@ services:
       LANG: en_US.UTF-8
       TZ: Asia/Tokyo
     tty: true
+    volumes:
+      - .:/usr/src/
     working_dir: /usr/src
