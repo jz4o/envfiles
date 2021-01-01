@@ -4,6 +4,7 @@ services:
     build:
       context: ./
       dockerfile: dockerfiles/git/Dockerfile
+    command: ['sh', 'dockerfiles/git/init.sh']
     environment:
       LANG: en_US.UTF-8
       TZ: Asia/Tokyo
