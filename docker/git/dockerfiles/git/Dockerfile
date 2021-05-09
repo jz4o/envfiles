@@ -7,5 +7,6 @@ RUN apk update && \
     apk add --no-cache \
     bash \
     git \
+    less \
     tzdata \
     vim
