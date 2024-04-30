@@ -4,11 +4,12 @@ services:
     build:
       context: ./
       dockerfile: dockerfiles/git/Dockerfile
-    command: ['sh', 'dockerfiles/git/init.sh']
+    command: ['sh', '../dockerfiles/git/init.sh']
     environment:
       LANG: en_US.UTF-8
       TZ: Asia/Tokyo
     tty: true
     volumes:
       - .:/usr/src/
-    working_dir: /usr/src
+    working_dir: /usr/src/src
+
